@@ -162,6 +162,7 @@ export function DashboardLayout({ children }) {
                     icon: <Settings className="h-4 w-4" />,
                     variant: pathname.startsWith("/settings") ? "default" : "ghost",
                   },
+                 
                 ]}
               />
             </div>
@@ -229,11 +230,18 @@ export function DashboardLayout({ children }) {
                   variant: pathname.startsWith("/rooms") ? "default" : "ghost",
                 },
                 {
+                  title: "Bot Sozlamalari",
+                  href: "/bot-settings",
+                  icon: <Settings className="h-4 w-4" />,
+                  variant: pathname.startsWith("/bot-settings") ? "default" : "ghost",
+                },
+                {
                   title: "Sozlamalar",
                   href: "/settings",
                   icon: <Settings className="h-4 w-4" />,
                   variant: pathname.startsWith("/settings") ? "default" : "ghost",
                 },
+              
               ]}
             />
           </ScrollArea>

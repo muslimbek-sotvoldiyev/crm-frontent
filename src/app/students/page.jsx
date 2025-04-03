@@ -28,8 +28,9 @@ const initialStudents = [
     id: "STD001",
     name: "Alisher Zokirov",
     phone: "+998 90 123 45 67",
+    relativePhone: "+998 90 987 65 43",
     group: "Intermediate B1",
-    status: "active",
+    status: "studying",
     joinDate: "12.03.2023",
     paymentStatus: "paid",
     attendance: 95,
@@ -38,8 +39,9 @@ const initialStudents = [
     id: "STD002",
     name: "Malika Karimova",
     phone: "+998 91 234 56 78",
+    relativePhone: "+998 91 876 54 32",
     group: "Elementary A2",
-    status: "active",
+    status: "studying",
     joinDate: "15.03.2023",
     paymentStatus: "paid",
     attendance: 90,
@@ -48,8 +50,9 @@ const initialStudents = [
     id: "STD003",
     name: "Jasur Toshmatov",
     phone: "+998 93 345 67 89",
+    relativePhone: "+998 93 765 43 21",
     group: "Advanced C1",
-    status: "active",
+    status: "studying",
     joinDate: "18.03.2023",
     paymentStatus: "paid",
     attendance: 85,
@@ -58,8 +61,9 @@ const initialStudents = [
     id: "STD004",
     name: "Nilufar Rahimova",
     phone: "+998 94 456 78 90",
+    relativePhone: "+998 94 654 32 10",
     group: "Intermediate B2",
-    status: "active",
+    status: "studying",
     joinDate: "20.03.2023",
     paymentStatus: "debt",
     attendance: 80,
@@ -68,8 +72,9 @@ const initialStudents = [
     id: "STD005",
     name: "Bobur Alimov",
     phone: "+998 95 567 89 01",
+    relativePhone: "+998 95 543 21 09",
     group: "Elementary A1",
-    status: "active",
+    status: "studying",
     joinDate: "22.03.2023",
     paymentStatus: "paid",
     attendance: 100,
@@ -78,8 +83,9 @@ const initialStudents = [
     id: "STD006",
     name: "Zarina Umarova",
     phone: "+998 97 678 90 12",
+    relativePhone: "+998 97 432 10 98",
     group: "Intermediate B1",
-    status: "inactive",
+    status: "completed",
     joinDate: "25.03.2023",
     paymentStatus: "debt",
     attendance: 65,
@@ -88,8 +94,9 @@ const initialStudents = [
     id: "STD007",
     name: "Sardor Kamolov",
     phone: "+998 99 789 01 23",
+    relativePhone: "+998 99 321 09 87",
     group: "Elementary A2",
-    status: "active",
+    status: "studying",
     joinDate: "28.03.2023",
     paymentStatus: "paid",
     attendance: 95,
@@ -98,8 +105,9 @@ const initialStudents = [
     id: "STD008",
     name: "Dilnoza Saidova",
     phone: "+998 90 890 12 34",
+    relativePhone: "+998 90 210 98 76",
     group: "Advanced C1",
-    status: "active",
+    status: "studying",
     joinDate: "01.04.2023",
     paymentStatus: "paid",
     attendance: 90,
@@ -113,7 +121,10 @@ export default function StudentsPage() {
   const [newStudent, setNewStudent] = useState({
     name: "",
     phone: "",
+    relativePhone: "",
     group: "",
+    status: "new",
+    customStatus: "",
   })
 
   const filteredStudents = students.filter(
@@ -138,8 +149,9 @@ export default function StudentsPage() {
         id,
         name: newStudent.name,
         phone: newStudent.phone,
+        relativePhone: newStudent.relativePhone,
         group: newStudent.group,
-        status: "active",
+        status: newStudent.status === "unknown" ? newStudent.customStatus : newStudent.status,
         joinDate: formattedDate,
         paymentStatus: "paid",
         attendance: 100,
@@ -149,10 +161,45 @@ export default function StudentsPage() {
     setNewStudent({
       name: "",
       phone: "",
+      relativePhone: "",
       group: "",
+      status: "new",
+      customStatus: "",
     })
 
     setIsAddDialogOpen(false)
+  }
+
+  // Status uchun badge ranglarini belgilash funksiyasi
+  const getStatusBadgeClass = (status) => {
+    switch (status) {
+      case "studying":
+        return "bg-green-50 text-green-700 border-green-200"
+      case "completed":
+        return "bg-blue-50 text-blue-700 border-blue-200"
+      case "new":
+        return "bg-purple-50 text-purple-700 border-purple-200"
+      case "unknown":
+        return "bg-gray-50 text-gray-700 border-gray-200"
+      default:
+        return "bg-green-50 text-green-700 border-green-200"
+    }
+  }
+
+  // Status nomini o'zbekchaga o'girish
+  const getStatusName = (status) => {
+    switch (status) {
+      case "studying":
+        return "O'qiyotgan"
+      case "completed":
+        return "Tugatgan"
+      case "new":
+        return "Yangi"
+      case "unknown":
+        return "Boshqa"
+      default:
+        return status // Return the custom status text directly
+    }
   }
 
   return (
@@ -190,6 +237,43 @@ export default function StudentsPage() {
                   placeholder="+998 90 123 45 67"
                 />
               </div>
+              <div className="grid gap-2">
+                <Label htmlFor="relativePhone">Qarindosh telefon raqami</Label>
+                <Input
+                  id="relativePhone"
+                  value={newStudent.relativePhone}
+                  onChange={(e) => setNewStudent({ ...newStudent, relativePhone: e.target.value })}
+                  placeholder="+998 90 123 45 67"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="status">Status</Label>
+                <Select
+                  value={newStudent.status}
+                  onValueChange={(value) => setNewStudent({ ...newStudent, status: value })}
+                >
+                  <SelectTrigger id="status">
+                    <SelectValue placeholder="Statusni tanlang" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="studying">O'qiyotgan</SelectItem>
+                    <SelectItem value="completed">Tugatgan</SelectItem>
+                    <SelectItem value="new">Yangi (kurs boshlamoqchi)</SelectItem>
+                    <SelectItem value="unknown">Boshqa (o'zingiz kiriting)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {newStudent.status === "unknown" && (
+                <div className="grid gap-2">
+                  <Label htmlFor="customStatus">Status (o'zingiz kiriting)</Label>
+                  <Input
+                    id="customStatus"
+                    value={newStudent.customStatus}
+                    onChange={(e) => setNewStudent({ ...newStudent, customStatus: e.target.value })}
+                    placeholder="O'quvchi statusini kiriting"
+                  />
+                </div>
+              )}
               <div className="grid gap-2">
                 <Label htmlFor="group">Guruh</Label>
                 <Select onValueChange={(value) => setNewStudent({ ...newStudent, group: value })}>
@@ -288,15 +372,8 @@ export default function StudentsPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge
-                        variant="outline"
-                        className={
-                          student.status === "active"
-                            ? "bg-green-50 text-green-700 border-green-200"
-                            : "bg-red-50 text-red-700 border-red-200"
-                        }
-                      >
-                        {student.status}
+                      <Badge variant="outline" className={getStatusBadgeClass(student.status)}>
+                        {getStatusName(student.status)}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
