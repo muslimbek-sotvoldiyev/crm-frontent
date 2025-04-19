@@ -1,30 +1,55 @@
 "use client"
 
-
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { BookOpen } from "lucide-react"
+import { BookOpen, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useLoginMutation } from "@/lib/service/authApi"
+
 
 export default function LoginPage() {
   const router = useRouter()
-  const [username, setUsername] = useState("")
+  const [phone, setUserphone] = useState("")
   const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+
+  // Use the login mutation hook from our API
+  const [login, { isLoading }] = useLoginMutation()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsLoading(true)
+    setErrorMessage("")
 
-    // In a real application, you would validate credentials here
-    // For demo purposes, we'll just redirect to the dashboard
-    setTimeout(() => {
+    try {
+      const result = await login({ phone, password }).unwrap()
+
+      // Store tokens in localStorage
+      localStorage.setItem("accessToken", result.access)
+      localStorage.setItem("refreshToken", result.refresh)
+
+      // Store user info if available
+      if (result.user) {
+        localStorage.setItem("user", JSON.stringify(result.user))
+      }
+
+      // Redirect to dashboard
       router.push("/")
-      setIsLoading(false)
-    }, 1000)
+    } catch (error) {
+      console.error("Login failed:", error)
+
+      // Handle different error types
+      if (error.status === 401) {
+        setErrorMessage("Login yoki parol noto'g'ri")
+      } else if (error.data?.detail) {
+        setErrorMessage(error.data.detail)
+      } else {
+        setErrorMessage("Serverga ulanishda xatolik yuz berdi")
+      }
+    }
   }
 
   return (
@@ -40,13 +65,19 @@ export default function LoginPage() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
+            {errorMessage && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{errorMessage}</AlertDescription>
+              </Alert>
+            )}
             <div className="space-y-2">
-              <Label htmlFor="username">Login</Label>
+              <Label htmlFor="phone">Login</Label>
               <Input
-                id="username"
+                id="phone"
                 placeholder="admin"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={phone}
+                onChange={(e) => setUserphone(e.target.value)}
                 required
               />
             </div>
@@ -72,4 +103,3 @@ export default function LoginPage() {
     </div>
   )
 }
-
