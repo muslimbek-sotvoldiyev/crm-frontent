@@ -1,8 +1,8 @@
 "use client";
 import { DashboardPage } from "@/components/dashboard-page"
-import useAuth from "@/hooks/auth"
+// import useAuth from "@/hooks/auth"
 
-useAuth();
+// useAuth();
 export default function Home() {
   // In a real application, you would check for authentication here
   // If not authenticated, redirect to login page
