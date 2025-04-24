@@ -5,6 +5,7 @@ const AuthApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://scholarium.pythonanywhere.com/api/",
   }),
+  
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
@@ -15,7 +16,7 @@ const AuthApi = createApi({
     }),
     
 
-    
+
     tokenVerify: builder.query({
       query: () => ({
         url: "/staff/get_me/",
