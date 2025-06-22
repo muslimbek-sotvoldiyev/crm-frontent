@@ -1,18 +1,23 @@
 "use client";
 import { DashboardPage } from "@/components/dashboard-page";
 import useAuth from "@/hooks/auth";
-import { redirect } from "next/navigation"; // Import qo'shish
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  // Hook komponent ichida chaqirilishi kerak
-  const authResult = useAuth(); // Agar hook qiymat qaytarsa
+  const { mounted } = useAuth();
   
-  // Authentication tekshirish
-  const isAuthenticated = false; // Bu qiymatni auth hook-dan oling
+  // Client-side mount bo'lguncha kutish
+  if (!mounted) {
+    return <div>Loading...</div>;
+  }
+
+  // Bu yerda authentication logic
+  const isAuthenticated = typeof window !== 'undefined' && 
+    localStorage.getItem("accessToken");
   
   if (!isAuthenticated) {
     redirect("/login");
-    return null; // redirect dan keyin return
+    return null;
   }
 
   return <DashboardPage />;

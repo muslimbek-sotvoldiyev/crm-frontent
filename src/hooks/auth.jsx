@@ -1,19 +1,27 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useTokenVerifyQuery, useRefreshTokenMutation } from "@/lib/service/authApi";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation"; // ✅ To'g'ri import
 
 const useAuth = () => {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [refreshToken] = useRefreshTokenMutation();
   const { error: meError, refetch: refetchMe } = useTokenVerifyQuery({});
 
+  // Client-side mount tekshirish
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const clearAuthAndRedirect = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("user");
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
+    }
     router.push("/login");
   };
 
@@ -22,9 +30,12 @@ const useAuth = () => {
       clearAuthAndRedirect();
       return;
     }
-  }, [meError, router]);
+  }, [meError]);
 
   useEffect(() => {
+    // Faqat client-side da ishga tushirish
+    if (!mounted) return;
+
     const accessToken = localStorage.getItem("accessToken");
     const refreshTokenStr = localStorage.getItem("refreshToken");
 
@@ -51,7 +62,7 @@ const useAuth = () => {
         if (error?.status === 401) {
           try {
             const refreshResponse = await refreshToken({
-              refresh: refreshTokenStr, // <-- bu yerda `refresh` deb yozilgan, `authApi` faylga mos
+              refresh: refreshTokenStr,
             }).unwrap();
 
             if (refreshResponse?.accessToken) {
@@ -76,9 +87,9 @@ const useAuth = () => {
     } else {
       refetchMe();
     }
-  }, [refetchMe, refreshToken, router]);
+  }, [mounted, refetchMe, refreshToken]);
 
-  return null;
+  return { mounted };
 };
 
 export default useAuth;
