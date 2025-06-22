@@ -1,19 +1,19 @@
 "use client";
-import { DashboardPage } from "@/components/dashboard-page"
-import useAuth from "@/hooks/auth"
+import { DashboardPage } from "@/components/dashboard-page";
+import useAuth from "@/hooks/auth";
+import { redirect } from "next/navigation"; // Import qo'shish
 
-useAuth();
 export default function Home() {
-  // In a real application, you would check for authentication here
-  // If not authenticated, redirect to login page
-  // For demo purposes, we'll just render the dashboard
-
-  // Uncomment this to enable authentication check
-  const isAuthenticated = false;
+  // Hook komponent ichida chaqirilishi kerak
+  const authResult = useAuth(); // Agar hook qiymat qaytarsa
+  
+  // Authentication tekshirish
+  const isAuthenticated = false; // Bu qiymatni auth hook-dan oling
+  
   if (!isAuthenticated) {
     redirect("/login");
+    return null; // redirect dan keyin return
   }
 
-  return <DashboardPage />
+  return <DashboardPage />;
 }
-
