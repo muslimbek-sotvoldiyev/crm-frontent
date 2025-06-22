@@ -33,4 +33,3 @@ export function PaymentStats() {
     </ResponsiveContainer>
   )
 }
-

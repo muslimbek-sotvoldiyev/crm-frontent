@@ -152,4 +152,3 @@ export function MonthlyAttendanceChart({ selectedGroup }) {
     </div>
   )
 }
-

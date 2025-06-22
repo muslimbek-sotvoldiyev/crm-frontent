@@ -32,12 +32,14 @@ import { MonthlyPaymentChart } from "@/components/monthly-payment-chart"
 
 // Sample data
 const groups = [
-  { id: "GRP001", name: "Elementary A1", teacher: "Aziza Karimova" },
-  { id: "GRP002", name: "Elementary A2", teacher: "Bobur Aliyev" },
-  { id: "GRP003", name: "Intermediate B1", teacher: "Dilnoza Rahimova" },
-  { id: "GRP004", name: "Intermediate B2", teacher: "Eldor Toshmatov" },
-  { id: "GRP005", name: "Advanced C1", teacher: "Feruza Kamalova" },
-  { id: "GRP006", name: "IELTS Preparation", teacher: "Gulnora Saidova" },
+  { id: "GRP001", name: "Elementary A1", teacher: "Aziza Karimova", subject: "Ingliz tili" },
+  { id: "GRP002", name: "Elementary A2", teacher: "Bobur Aliyev", subject: "Ingliz tili" },
+  { id: "GRP003", name: "Intermediate B1", teacher: "Dilnoza Rahimova", subject: "Ingliz tili" },
+  { id: "GRP004", name: "Intermediate B2", teacher: "Eldor Toshmatov", subject: "Ingliz tili" },
+  { id: "GRP005", name: "Advanced C1", teacher: "Feruza Kamalova", subject: "Ingliz tili" },
+  { id: "GRP006", name: "IELTS Preparation", teacher: "Gulnora Saidova", subject: "IELTS" },
+  { id: "GRP007", name: "Matematika 7-sinf", teacher: "Bobur Aliyev", subject: "Matematika" },
+  { id: "GRP008", name: "Matematika 8-sinf", teacher: "Anvar Karimov", subject: "Matematika" },
 ]
 
 const students = {
@@ -182,7 +184,7 @@ export default function AttendancePage() {
             <SelectContent>
               {groups.map((group) => (
                 <SelectItem key={group.id} value={group.id}>
-                  {group.name} - {group.teacher}
+                  {group.name} - {group.subject} - {group.teacher}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -198,7 +200,8 @@ export default function AttendancePage() {
               <DialogHeader>
                 <DialogTitle>Davomat belgilash</DialogTitle>
                 <DialogDescription>
-                  {groups.find((g) => g.id === selectedGroup)?.name} guruhi uchun davomat ma'lumotlarini kiriting
+                  {groups.find((g) => g.id === selectedGroup)?.name} guruhi (
+                  {groups.find((g) => g.id === selectedGroup)?.subject}) uchun davomat ma'lumotlarini kiriting
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -557,4 +560,3 @@ export default function AttendancePage() {
     </div>
   )
 }
-

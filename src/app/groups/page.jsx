@@ -147,7 +147,7 @@ export default function GroupsPage() {
               Yangi guruh
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Yangi guruh qo'shish</DialogTitle>
               <DialogDescription>Guruh ma'lumotlarini kiriting</DialogDescription>
@@ -191,23 +191,145 @@ export default function GroupsPage() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* Yangi dars jadvali qismi */}
               <div className="grid gap-2">
-                <Label htmlFor="schedule">Dars jadvali</Label>
-                <Select onValueChange={(value) => setNewGroup({ ...newGroup, schedule: value })}>
-                  <SelectTrigger id="schedule">
-                    <SelectValue placeholder="Dars jadvalini tanlang" />
+                <Label>Dars jadvali</Label>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-sm">Haftada necha kun</Label>
+                      <Select onValueChange={(value) => setNewGroup({ ...newGroup, daysPerWeek: value })}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Kunlar soni" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="2">2 kun</SelectItem>
+                          <SelectItem value="3">3 kun</SelectItem>
+                          <SelectItem value="4">4 kun</SelectItem>
+                          <SelectItem value="5">5 kun</SelectItem>
+                          <SelectItem value="6">6 kun</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-sm">Har bir dars davomiyligi</Label>
+                      <Select onValueChange={(value) => setNewGroup({ ...newGroup, lessonDuration: value })}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Davomiylik" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="60">1 soat</SelectItem>
+                          <SelectItem value="90">1.5 soat</SelectItem>
+                          <SelectItem value="120">2 soat</SelectItem>
+                          <SelectItem value="150">2.5 soat</SelectItem>
+                          <SelectItem value="180">3 soat</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label className="text-sm">Dars kunlari</Label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {["Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba", "Yakshanba"].map((day) => (
+                        <div key={day} className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id={day}
+                            className="rounded border-gray-300"
+                            onChange={(e) => {
+                              const days = newGroup.selectedDays || []
+                              if (e.target.checked) {
+                                setNewGroup({ ...newGroup, selectedDays: [...days, day] })
+                              } else {
+                                setNewGroup({ ...newGroup, selectedDays: days.filter((d) => d !== day) })
+                              }
+                            }}
+                          />
+                          <Label htmlFor={day} className="text-sm">
+                            {day}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-sm">Boshlanish vaqti</Label>
+                      <Select onValueChange={(value) => setNewGroup({ ...newGroup, startTime: value })}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Vaqt" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="08:00">08:00</SelectItem>
+                          <SelectItem value="09:00">09:00</SelectItem>
+                          <SelectItem value="10:00">10:00</SelectItem>
+                          <SelectItem value="11:00">11:00</SelectItem>
+                          <SelectItem value="12:00">12:00</SelectItem>
+                          <SelectItem value="13:00">13:00</SelectItem>
+                          <SelectItem value="14:00">14:00</SelectItem>
+                          <SelectItem value="15:00">15:00</SelectItem>
+                          <SelectItem value="16:00">16:00</SelectItem>
+                          <SelectItem value="17:00">17:00</SelectItem>
+                          <SelectItem value="18:00">18:00</SelectItem>
+                          <SelectItem value="19:00">19:00</SelectItem>
+                          <SelectItem value="20:00">20:00</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-sm">Tugash vaqti</Label>
+                      <Input
+                        readOnly
+                        value={
+                          newGroup.startTime && newGroup.lessonDuration
+                            ? `${String(Math.floor((Number.parseInt(newGroup.startTime.split(":")[0]) * 60 + Number.parseInt(newGroup.startTime.split(":")[1]) + Number.parseInt(newGroup.lessonDuration)) / 60)).padStart(2, "0")}:${String((Number.parseInt(newGroup.startTime.split(":")[0]) * 60 + Number.parseInt(newGroup.startTime.split(":")[1]) + Number.parseInt(newGroup.lessonDuration)) % 60).padStart(2, "0")}`
+                            : ""
+                        }
+                        placeholder="Avtomatik hisoblanadi"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="level">Kurs darajasi</Label>
+                <Select onValueChange={(value) => setNewGroup({ ...newGroup, level: value })}>
+                  <SelectTrigger id="level">
+                    <SelectValue placeholder="Darajani tanlang" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Du-Chor-Juma 09:00-10:30">Du-Chor-Juma 09:00-10:30</SelectItem>
-                    <SelectItem value="Du-Chor-Juma 11:00-12:30">Du-Chor-Juma 11:00-12:30</SelectItem>
-                    <SelectItem value="Du-Chor-Juma 14:00-15:30">Du-Chor-Juma 14:00-15:30</SelectItem>
-                    <SelectItem value="Du-Chor-Juma 16:00-17:30">Du-Chor-Juma 16:00-17:30</SelectItem>
-                    <SelectItem value="Se-Pay-Shan 09:00-10:30">Se-Pay-Shan 09:00-10:30</SelectItem>
-                    <SelectItem value="Se-Pay-Shan 11:00-12:30">Se-Pay-Shan 11:00-12:30</SelectItem>
-                    <SelectItem value="Se-Pay-Shan 14:00-15:30">Se-Pay-Shan 14:00-15:30</SelectItem>
-                    <SelectItem value="Se-Pay-Shan 16:00-17:30">Se-Pay-Shan 16:00-17:30</SelectItem>
+                    <SelectItem value="Elementary">Elementary</SelectItem>
+                    <SelectItem value="Intermediate">Intermediate</SelectItem>
+                    <SelectItem value="Advanced">Advanced</SelectItem>
+                    <SelectItem value="IELTS">IELTS</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="price">Oylik to'lov (so'm)</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  value={newGroup.price}
+                  onChange={(e) => setNewGroup({ ...newGroup, price: e.target.value })}
+                  placeholder="450000"
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="maxStudents">Maksimal o'quvchilar soni</Label>
+                <Input
+                  id="maxStudents"
+                  type="number"
+                  value={newGroup.maxStudents}
+                  onChange={(e) => setNewGroup({ ...newGroup, maxStudents: e.target.value })}
+                  placeholder="15"
+                />
               </div>
             </div>
             <DialogFooter>
@@ -310,4 +432,3 @@ export default function GroupsPage() {
     </div>
   )
 }
-

@@ -69,4 +69,3 @@ export function AttendanceStatsChart({ present, absent }) {
     </div>
   )
 }
-

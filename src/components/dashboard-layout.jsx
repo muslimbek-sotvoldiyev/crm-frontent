@@ -1,12 +1,10 @@
 "use client"
 
-
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
   BarChart3,
-  BookOpen,
   Calendar,
   DollarSign,
   Home,
@@ -21,7 +19,6 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ModeToggle } from "@/components/mode-toggle"
-
 
 export function Nav({ links, isCollapsed }) {
   const pathname = usePathname()
@@ -108,8 +105,10 @@ export function DashboardLayout({ children }) {
           <SheetContent side="left" className="w-72">
             <div className="grid gap-2 py-6">
               <div className="flex items-center gap-2 px-2">
-                <BookOpen className="h-6 w-6" />
-                <span className="text-lg font-semibold">English Center CRM</span>
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
+                  O
+                </div>
+                <span className="text-lg font-semibold">Oxford Education Center</span>
               </div>
               <Nav
                 isCollapsed={false}
@@ -125,6 +124,12 @@ export function DashboardLayout({ children }) {
                     href: "/students",
                     icon: <Users className="h-4 w-4" />,
                     variant: pathname.startsWith("/students") ? "default" : "ghost",
+                  },
+                  {
+                    title: "O'qituvchilar",
+                    href: "/teachers",
+                    icon: <UserSquare2 className="h-4 w-4" />,
+                    variant: pathname.startsWith("/teachers") ? "default" : "ghost",
                   },
                   {
                     title: "Guruhlar",
@@ -145,6 +150,12 @@ export function DashboardLayout({ children }) {
                     variant: pathname.startsWith("/payments") ? "default" : "ghost",
                   },
                   {
+                    title: "Moliya",
+                    href: "/finance",
+                    icon: <DollarSign className="h-4 w-4" />,
+                    variant: pathname.startsWith("/finance") ? "default" : "ghost",
+                  },
+                  {
                     title: "Dars jadvali",
                     href: "/schedule",
                     icon: <Calendar className="h-4 w-4" />,
@@ -157,20 +168,27 @@ export function DashboardLayout({ children }) {
                     variant: pathname.startsWith("/rooms") ? "default" : "ghost",
                   },
                   {
+                    title: "Bot Sozlamalari",
+                    href: "/bot-settings",
+                    icon: <Settings className="h-4 w-4" />,
+                    variant: pathname.startsWith("/bot-settings") ? "default" : "ghost",
+                  },
+                  {
                     title: "Sozlamalar",
                     href: "/settings",
                     icon: <Settings className="h-4 w-4" />,
                     variant: pathname.startsWith("/settings") ? "default" : "ghost",
                   },
-                 
                 ]}
               />
             </div>
           </SheetContent>
         </Sheet>
         <div className="flex items-center gap-2">
-          <BookOpen className="h-6 w-6" />
-          <span className="text-lg font-semibold">English Center CRM</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
+            O
+          </div>
+          <span className="text-lg font-semibold">Oxford Education Center</span>
         </div>
         <div className="flex-1"></div>
         <div className="flex items-center gap-4">
@@ -200,6 +218,12 @@ export function DashboardLayout({ children }) {
                   variant: pathname.startsWith("/students") ? "default" : "ghost",
                 },
                 {
+                  title: "O'qituvchilar",
+                  href: "/teachers",
+                  icon: <UserSquare2 className="h-4 w-4" />,
+                  variant: pathname.startsWith("/teachers") ? "default" : "ghost",
+                },
+                {
                   title: "Guruhlar",
                   href: "/groups",
                   icon: <UserSquare2 className="h-4 w-4" />,
@@ -216,6 +240,12 @@ export function DashboardLayout({ children }) {
                   href: "/payments",
                   icon: <DollarSign className="h-4 w-4" />,
                   variant: pathname.startsWith("/payments") ? "default" : "ghost",
+                },
+                {
+                  title: "Moliya",
+                  href: "/finance",
+                  icon: <DollarSign className="h-4 w-4" />,
+                  variant: pathname.startsWith("/finance") ? "default" : "ghost",
                 },
                 {
                   title: "Dars jadvali",
@@ -241,7 +271,6 @@ export function DashboardLayout({ children }) {
                   icon: <Settings className="h-4 w-4" />,
                   variant: pathname.startsWith("/settings") ? "default" : "ghost",
                 },
-              
               ]}
             />
           </ScrollArea>
@@ -251,4 +280,3 @@ export function DashboardLayout({ children }) {
     </div>
   )
 }
-
